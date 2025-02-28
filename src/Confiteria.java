@@ -48,7 +48,7 @@ public class Confiteria {
 
     public synchronized void salirDeConfiteria(Esquiador esquiador){
         //El esquiador se retira
-        System.out.println("Esquiador " +esquiador.getIdEsquiador()+" se retira de la confiteria.");
+        System.out.println("🚶🏻 Esquiador " +esquiador.getIdEsquiador()+" se retira de la confiteria.");
         ocupacion--;
         this.notify();
     }

@@ -55,7 +55,7 @@ public class Esquiador implements Runnable{
                 //Libera el molinete
                 medioElegido.soltarMolinete();
 
-                System.out.println("⬆️Esquiador "+getIdEsquiador()+" subiendo ...");
+                //Simular tiempo de subida
                 simularTiempo(2000);
 
                 //Decide aleatoriamente si tomar o no clases
@@ -97,7 +97,7 @@ public class Esquiador implements Runnable{
             }else if(puedePasar == 1){
 
                 //Medio cerrado
-                System.out.println("🚶🏻Esquiador "+getIdEsquiador()+" se retira por cierre de medio.");
+                System.out.println("🚶🏻 Esquiador "+getIdEsquiador()+" se retira por cierre de medio.");
 
             }else{ 
 

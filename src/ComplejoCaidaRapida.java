@@ -42,17 +42,18 @@ public class ComplejoCaidaRapida {
       Instructor instructor = colaInstructores.poll();
       if (instructor != null) {
           CountDownLatch finClaseLatch = new CountDownLatch(1); // Latch para la clase de ski o snow
-          System.out.println("✅Grupo de " + tipoClase + " formado. Instructor " + instructor.getIdInstructor() + " comenzando clase.");
-          instructor.darClase(finClaseLatch); // El instructor da la clase
+          System.out.println("✅ Grupo de " + tipoClase + "  formado. Instructor " + instructor.getIdInstructor() + " comenzando clase.");
+          instructor.darClase(finClaseLatch, tipoClase); // El instructor da la clase
           try {
+
               finClaseLatch.await(); // Esperar a que la clase termine
-              System.out.println("Clase de " + tipoClase + " finalizada. Los esquiadores pueden continuar.");
+
           } catch (InterruptedException e) {
               e.printStackTrace();
           }
           colaInstructores.offer(instructor); // El instructor vuelve a estar disponible
       } else {
-          System.out.println("❌No hay instructores disponibles para " + tipoClase + ". Los alumnos desisten y se les devuelve el dinero.");
+          System.out.println("❌ No hay instructores disponibles para " + tipoClase + ". Los alumnos desisten y se les devuelve el dinero.");
       }
    }
 
@@ -74,14 +75,12 @@ public class ComplejoCaidaRapida {
             medio.cerrar();
       }
       mediosAbiertos = false;
-      System.out.println("⛔️Todos los medios de elevación han sido cerrados.");
-
-      mostrarContadoresMolinete();
+      System.out.println("\n ⛔️ MEDIOS DE ELEVACION CERRADOS. ⛔️ \n");
    }
 
    public void avisoAperturaMedios(){
-
-      System.out.println("⏰Los medios de elevación han sido abiertos.");
+      
+      System.out.println("\n⏰ MEDIOS DE ELEVACION ABIERTOS. ⏰\n");
 
    }
 
@@ -90,9 +89,9 @@ public class ComplejoCaidaRapida {
    }
 
    public void mostrarContadoresMolinete() {
-      System.out.println("Contadores de Molinetes:");
+      System.out.println("\n📊 USO DE LOS MEDIOS:\n");
       for (MedioElevador medio : mediosDeElevacion) {
-          System.out.println("Medio " + medio.getIdMedio() + " fue utilizado " + medio.getContadorMolinete() + " veces.");
+          System.out.println("🎢 -Medio " + medio.getIdMedio() + " fue utilizado " + medio.getContadorMolinete() + " veces.");
       }
   }
 
@@ -100,20 +99,20 @@ public class ComplejoCaidaRapida {
    //Clases de Ski y Snowboard
    public void intentarTomarClase(Esquiador esquiador){
       String tipoClase = esquiador.getTipoClase();
-      System.out.println("Esquiador " + esquiador.getIdEsquiador() + " esperando para formar grupo de " + tipoClase + ".");
+      System.out.println("⏳ Esquiador " + esquiador.getIdEsquiador() + " esperando para formar grupo de " + tipoClase + ".");
       if (tipoClase.equals("ski")) {
          // Esperar en la barrera de ski
           try {
             barreraSki.await(7, TimeUnit.SECONDS);
          } catch (TimeoutException | InterruptedException | BrokenBarrierException e) {
-            System.out.println("Esquiador " + esquiador.getIdEsquiador() + " se canso de esperar para formar grupo de " + tipoClase + ".");
+            System.out.println("⌛️ Esquiador " + esquiador.getIdEsquiador() + " se canso de esperar para formar grupo de " + tipoClase + ".");
          } 
       } else {
          // Esperar en la barrera de snowboard
          try {
             barreraSnow.await(7, TimeUnit.SECONDS);
          } catch (TimeoutException | InterruptedException | BrokenBarrierException e) {
-            System.out.println("Esquiador " + esquiador.getIdEsquiador() + " se canso de esperar para formar grupo de " + tipoClase + ".");
+            System.out.println("⌛️ Esquiador " + esquiador.getIdEsquiador() + " se canso de esperar para formar grupo de " + tipoClase + ".");
          }       
       }
   }

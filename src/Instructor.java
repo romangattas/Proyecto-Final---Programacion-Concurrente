@@ -11,11 +11,14 @@ public class Instructor {
         return identificacion;
     }
 
-    public void darClase(CountDownLatch finClaseLatch) {
+    public void darClase(CountDownLatch finClaseLatch, String tipoClase) {
         try {
-            System.out.println("Instructor " + getIdInstructor() + " dando clase...");
+
+            System.out.println(" Instructor " + getIdInstructor() + " dando clase...");
             Thread.sleep(5000); // Simular el tiempo de la clase
-            System.out.println("Instructor " + getIdInstructor() + " ha terminado la clase.");
+            System.out.println("🏁 Clase de " + tipoClase + "  finalizada. Los esquiadores pueden continuar.");
+            System.out.println(" Instructor " + getIdInstructor() + " vuelve a estar disponible.");
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
