@@ -55,13 +55,12 @@ public class Esquiador implements Runnable{
                 //Libera el molinete
                 medioElegido.soltarMolinete();
 
-                System.out.println("Esquiador "+getIdEsquiador()+" subiendo ...");
+                System.out.println("⬆️Esquiador "+getIdEsquiador()+" subiendo ...");
                 simularTiempo(2000);
 
                 //Decide aleatoriamente si tomar o no clases
                 if(Math.random() < 0.5){
 
-                    System.out.println("Esquiador "+getIdEsquiador()+" intenta tomar clases.");
                     complejo.intentarTomarClase(this);
                     
                 }
@@ -98,7 +97,7 @@ public class Esquiador implements Runnable{
             }else if(puedePasar == 1){
 
                 //Medio cerrado
-                System.out.println("Esquiador "+getIdEsquiador()+" se retira por cierre de medio.");
+                System.out.println("🚶🏻Esquiador "+getIdEsquiador()+" se retira por cierre de medio.");
 
             }else{ 
 

@@ -21,13 +21,13 @@ public class Confiteria {
             this.wait();
         }
         ocupacion++;
-        System.out.println("Esquiador " +esquiador.getIdEsquiador()+" ingreso a la confiteria y pago su menu.");
+        System.out.println("💵Esquiador " +esquiador.getIdEsquiador()+" ingreso a la confiteria y pago su menu.");
     }
 
     public void retirarComida(Esquiador esquiador) throws InterruptedException{
         //Cada esquiador se acerca al mostrador a retirar la comida
         mostradorComida.acquire();
-        System.out.println("Esquiador " +esquiador.getIdEsquiador()+" esta retirando la comida.");
+        System.out.println("🍕Esquiador " +esquiador.getIdEsquiador()+" esta retirando la comida.");
     }
 
     public void finRetirarComida(Esquiador esquiador) throws InterruptedException{
@@ -38,7 +38,7 @@ public class Confiteria {
     public void retirarPostre(Esquiador esquiador) throws InterruptedException{
         //El esquiador que compro postre se acerca al mostrador a retiralo
         mostradorPostre.acquire();
-        System.out.println("Esquiador " +esquiador.getIdEsquiador()+" esta retirando el postre.");
+        System.out.println("🍧Esquiador " +esquiador.getIdEsquiador()+" esta retirando el postre.");
     }
 
     public void finRetirarPostre(Esquiador esquiador) throws InterruptedException{

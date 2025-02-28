@@ -68,13 +68,15 @@ public class ComplejoCaidaRapida {
    }
 
    //Método que cierra cada medio y actualiza el estado de mediosAbiertos
-   
+
    public void cerrarMediosElevacion(){
       for (MedioElevador medio : mediosDeElevacion) {
             medio.cerrar();
       }
       mediosAbiertos = false;
       System.out.println("⛔️Todos los medios de elevación han sido cerrados.");
+
+      mostrarContadoresMolinete();
    }
 
    public void avisoAperturaMedios(){
@@ -86,6 +88,13 @@ public class ComplejoCaidaRapida {
    public synchronized boolean getMediosAbiertos(){
       return mediosAbiertos;
    }
+
+   public void mostrarContadoresMolinete() {
+      System.out.println("Contadores de Molinetes:");
+      for (MedioElevador medio : mediosDeElevacion) {
+          System.out.println("Medio " + medio.getIdMedio() + " fue utilizado " + medio.getContadorMolinete() + " veces.");
+      }
+  }
 
    
    //Clases de Ski y Snowboard
