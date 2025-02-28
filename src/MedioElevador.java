@@ -4,58 +4,72 @@ public class MedioElevador {
     private Semaphore molinetes;
     private int contMolinete;
     private int idElevador;
+    private boolean abierto;  // Estado: true = abierto, false = cerrado
 
-    public MedioElevador(int idE){
-
+    public MedioElevador(int idE) {
         idElevador = idE;
+        // Se asume que la cantidad de molinetes es igual al id del medio
         molinetes = new Semaphore(idE);
-        contMolinete = 0;   
-
+        contMolinete = 0;
+        abierto = true;
     }
 
-    public int getIdMedio(){
+    public int getIdMedio() {
         return idElevador;
     }
 
-    public int getContadorMolinete(){
+    public int getContadorMolinete() {
         return contMolinete;
     }
 
-    public boolean utilizarMolinete(Esquiador esquiador){
-
-            boolean puedePasar = false;
-            
-            try {
-
-                molinetes.acquire();
-
-                if(esquiador.tienePase()){
-                    //Si tiene el pase entonces utiliza el molinete y suma 1 al contador
-                    System.out.println("Esquiador " + esquiador.getIdEsquiador() + " está usando un molinete del medio " + getIdMedio()+".");
-                    contMolinete+=1; // Suma 1 uso del molinete al contador
-                    puedePasar = true;
-                    
-                }else{
-                    //No puede pasar porque no tiene pase, suelta el molinete inmediatamente y se retira
-                    System.out.println("Esquiador " + esquiador.getIdEsquiador() + " NO tenia pase y se retira.");
-                    molinetes.release();
-                }   
-
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
-
-            } 
-            return puedePasar;
-
+    // Método sincronizado para consultar el estado del medio
+    public synchronized boolean estaAbierto() {
+        return abierto;
     }
 
-    public void soltarMolinete(){
-        //Suelta el molinete que utilizo
+    // Método sincronizado para cerrar el medio
+    public synchronized void cerrar() {
+        if (abierto) {
+            abierto = false;
+            System.out.println("Medio de elevación " + getIdMedio() + " cerrado.");
+        }
+    }
+
+    public int utilizarMolinete(Esquiador esquiador) {
+
+        //Resultado indica: 0 = Paso exitoso, 1 = Medio cerrado, 2 = No tiene pase
+        int puedePasar = 0;
+
+        // Verifica antes de intentar adquirir el molinete
+        if (estaAbierto()) {
+
+            try {
+                molinetes.acquire();
+    
+                if (esquiador.tienePase()) {
+                    System.out.println("Esquiador " + esquiador.getIdEsquiador() 
+                            + " está usando un molinete del medio " + getIdMedio() + ".");
+                    contMolinete++;  // Incrementa el contador de usos
+    
+                } else {
+                    System.out.println("Esquiador " + esquiador.getIdEsquiador() 
+                            + " NO tenía pase y se retira.");
+                    molinetes.release();
+                    puedePasar = 2;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            System.out.println("Medio de elevación " + getIdMedio() + " cerrado.");
+            puedePasar = 1;
+        }
+        
+        return puedePasar;
+    }
+
+    public void soltarMolinete() {
         molinetes.release();
     }
-
-
-
-
 }

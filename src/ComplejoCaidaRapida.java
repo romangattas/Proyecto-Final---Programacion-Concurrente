@@ -8,6 +8,7 @@ public class ComplejoCaidaRapida {
    private CyclicBarrier barreraSki;
    private CyclicBarrier barreraSnow;
    private BlockingQueue<Instructor> colaInstructores;
+   private boolean mediosAbiertos;
    
 
    public ComplejoCaidaRapida(){
@@ -25,18 +26,23 @@ public class ComplejoCaidaRapida {
          colaInstructores.offer(new Instructor(i));
       }
 
-      barreraSki = new CyclicBarrier(4, () -> notificarInstructor("Ski"));
-      barreraSnow = new CyclicBarrier(4, () -> notificarInstructor("Snowboard"));
+      barreraSki = new CyclicBarrier(4, () -> notificarInstructor("Ski⛷️"));
+      barreraSnow = new CyclicBarrier(4, () -> notificarInstructor("Snowboard🏂"));
 
       confiteria = new Confiteria();
+
+      mediosAbiertos = true;
    }
+
+ 
+
 
    //Metodo de la barrera
    private void notificarInstructor(String tipoClase) {
       Instructor instructor = colaInstructores.poll();
       if (instructor != null) {
           CountDownLatch finClaseLatch = new CountDownLatch(1); // Latch para la clase de ski o snow
-          System.out.println("Grupo de " + tipoClase + " formado. Instructor " + instructor.getIdInstructor() + " comenzando clase.");
+          System.out.println("✅Grupo de " + tipoClase + " formado. Instructor " + instructor.getIdInstructor() + " comenzando clase.");
           instructor.darClase(finClaseLatch); // El instructor da la clase
           try {
               finClaseLatch.await(); // Esperar a que la clase termine
@@ -46,10 +52,41 @@ public class ComplejoCaidaRapida {
           }
           colaInstructores.offer(instructor); // El instructor vuelve a estar disponible
       } else {
-          System.out.println("No hay instructores disponibles para " + tipoClase + ". Los alumnos desisten y se les devuelve el dinero.");
+          System.out.println("❌No hay instructores disponibles para " + tipoClase + ". Los alumnos desisten y se les devuelve el dinero.");
       }
    }
-  
+
+
+
+
+
+
+   //Medios de Elevacion
+   public MedioElevador seleccionarMedioAleatorio(){
+      int eleccionMedio = (int) (Math.random() * MAX_MEDIOS_ELEVACION);
+      return mediosDeElevacion[eleccionMedio];
+   }
+
+   //Método que cierra cada medio y actualiza el estado de mediosAbiertos
+   
+   public void cerrarMediosElevacion(){
+      for (MedioElevador medio : mediosDeElevacion) {
+            medio.cerrar();
+      }
+      mediosAbiertos = false;
+      System.out.println("⛔️Todos los medios de elevación han sido cerrados.");
+   }
+
+   public void avisoAperturaMedios(){
+
+      System.out.println("⏰Los medios de elevación han sido abiertos.");
+
+   }
+
+   public synchronized boolean getMediosAbiertos(){
+      return mediosAbiertos;
+   }
+
    
    //Clases de Ski y Snowboard
    public void intentarTomarClase(Esquiador esquiador){
@@ -72,11 +109,7 @@ public class ComplejoCaidaRapida {
       }
   }
 
-   //Medios de Elevacion
-   public MedioElevador seleccionarMedioAleatorio(){
-      int eleccionMedio = (int) (Math.random() * MAX_MEDIOS_ELEVACION);
-      return mediosDeElevacion[eleccionMedio];
-   }
+
 
    //Confiteria
    public void entrarYPagar(Esquiador esquiador) {

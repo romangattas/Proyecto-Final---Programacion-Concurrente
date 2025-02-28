@@ -42,57 +42,72 @@ public class Esquiador implements Runnable{
 
     public void run(){
 
-        MedioElevador medioElegido = getComplejo().seleccionarMedioAleatorio();
+        while(complejo.getMediosAbiertos()){
 
-        boolean puedePasar = medioElegido.utilizarMolinete(this);
+            MedioElevador medioElegido = getComplejo().seleccionarMedioAleatorio();
 
-        simularTiempo(1000);
+            int puedePasar = medioElegido.utilizarMolinete(this);
 
-        if(puedePasar){
+            simularTiempo(1000);
 
-            //Libera el molinete
-            medioElegido.soltarMolinete();
+            if(puedePasar == 0){
 
-            System.out.println("Esquiador "+getIdEsquiador()+" subiendo ...");
-            simularTiempo(2000);
+                //Libera el molinete
+                medioElegido.soltarMolinete();
 
-            //Decide aleatoriamente si tomar o no clases
-            if(Math.random() < 0.5){
+                System.out.println("Esquiador "+getIdEsquiador()+" subiendo ...");
+                simularTiempo(2000);
 
-                System.out.println("Esquiador "+getIdEsquiador()+" intenta tomar clases.");
-                complejo.intentarTomarClase(this);
+                //Decide aleatoriamente si tomar o no clases
+                if(Math.random() < 0.5){
+
+                    System.out.println("Esquiador "+getIdEsquiador()+" intenta tomar clases.");
+                    complejo.intentarTomarClase(this);
+                    
+                }
+
+                //Descanso
+                simularTiempo(3000);
                 
-            }
+                //Decide aleatoriamente si entrar o no a la confiteria
+                if(Math.random() < 0.5){
 
-            //Descanso
-            simularTiempo(3000);
-            
-            //Decide aleatoriamente si entrar o no a la confiteria
-            if(Math.random() < 0.5){
-
-                //Simula ingreso a la confiteria
-                complejo.entrarYPagar(this);
-                simularTiempo(1000);
-
-                //Simula tiempo de retiro
-                complejo.retirarComida(this);
-                simularTiempo(1500);
-                complejo.finRetirarComida(null);
-
-                //Si pidio postre
-                if(getMenu()){
+                    //Simula ingreso a la confiteria
+                    complejo.entrarYPagar(this);
+                    simularTiempo(1000);
 
                     //Simula tiempo de retiro
-                    complejo.retirarPostre(this);
-                    simularTiempo(1000);
-                    complejo.finRetirarPostre(this);
+                    complejo.retirarComida(this);
+                    simularTiempo(1500);
+                    complejo.finRetirarComida(null);
 
+                    //Si pidio postre
+                    if(getMenu()){
+
+                        //Simula tiempo de retiro
+                        complejo.retirarPostre(this);
+                        simularTiempo(1000);
+                        complejo.finRetirarPostre(this);
+
+                    }
+                    
+                    complejo.salirDeConfiteria(this);
+                    
                 }
-                
-                complejo.salirDeConfiteria(this);
+
+            }else if(puedePasar == 1){
+
+                //Medio cerrado
+                System.out.println("Esquiador "+getIdEsquiador()+" se retira por cierre de medio.");
+
+            }else{ 
+
+                //No tiene pase
+                simularTiempo(1000);
+                //Adquiere pase y vuelve a intentar subir
+                pase = true;
                 
             }
-
         }
 
     }
